@@ -1,11 +1,12 @@
-import { generarId } from "./funciones.js";
+import { generarId } from "./funciones";
+import type { Cita } from "./types";
 
-export let editando = {
+let editando = {
   value: false,
 };
 
 // Objeto de Cita
-export const citaObj = {
+const citaObj: Cita = {
   id: generarId(),
   paciente: "",
   propietario: "",
@@ -13,3 +14,5 @@ export const citaObj = {
   fecha: "",
   sintomas: "",
 };
+
+export { editando, citaObj };

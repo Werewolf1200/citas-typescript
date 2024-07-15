@@ -1,6 +1,6 @@
-import Notificacion from "./classes/Notificacion.js";
-import AdminCitas from "./classes/AdminCitas.js";
-import { citaObj, editando } from "./variables.js";
+import Notificacion from "./classes/Notificacion";
+import AdminCitas from "./classes/AdminCitas";
+import { citaObj, editando } from "./variables";
 import {
   formulario,
   formularioInput,
@@ -9,16 +9,18 @@ import {
   emailInput,
   fechaInput,
   sintomasInput,
-} from "./selectores.js";
+} from "./selectores";
+import type { Cita } from "./types";
 
 const citas = new AdminCitas();
 
-export function datosCita(e) {
+export function datosCita(e: Event) {
   // Añade dinamicamente los datos al Objeto
-  citaObj[e.target.name] = e.target.value;
+  const target = e.target as HTMLInputElement;
+  citaObj[target.name] = target.value;
 }
 
-export function submitCita(e) {
+export function submitCita(e: SubmitEvent) {
   e.preventDefault();
 
   if (Object.values(citaObj).some((valor) => valor.trim() === "")) {
@@ -43,9 +45,12 @@ export function submitCita(e) {
     });
   }
 
-  formulario.reset();
+  formulario?.reset();
   reiniciarObjetoCita();
-  formularioInput.value = "Registrar Paciente";
+  if (formularioInput !== null) {
+    formularioInput.value = "Registrar Paciente";
+  }
+
   editando.value = false;
 }
 
@@ -64,16 +69,14 @@ export function generarId() {
   return Math.random().toString(36).substring(2) + Date.now();
 }
 
-export function cargarEdicion(cita) {
+export function cargarEdicion(cita: Cita) {
   Object.assign(citaObj, cita);
+  editando.value = true;
 
   pacienteInput.value = cita.paciente;
   propietarioInput.value = cita.propietario;
   emailInput.value = cita.email;
   fechaInput.value = cita.fecha;
   sintomasInput.value = cita.sintomas;
-
-  editando.value = true;
-
   formularioInput.value = "Guardar Cambios";
 }
